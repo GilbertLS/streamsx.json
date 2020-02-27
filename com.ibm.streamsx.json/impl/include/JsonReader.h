@@ -1080,6 +1080,14 @@ namespace com { namespace ibm { namespace streamsx { namespace json {
 
 		if(!value)					status = 4;
 		else if(value->IsNull())	status = 3;
+		else if(value->IsObject())   {
+      // Return json string if value is an object
+			status = 0;
+			rapidjson::StringBuffer str;
+			rapidjson::Writer<rapidjson::StringBuffer> writer(str);
+			value->Accept(writer);
+			return SPL::rstring(str.GetString());
+		}
 		else {
 			try {
 				switch (value->GetType()) {
@@ -1216,4 +1224,3 @@ namespace com { namespace ibm { namespace streamsx { namespace json {
 }}}}
 
 /* JSON_READER_H_ */
-
